@@ -1,20 +1,23 @@
-# Auswertung zusammengesetzter Funktionen
+# 使用 LLM 生成 MySQL 查询
 
-import { Tabs, Tab } from 'nextra/components';
+import { Tabs, Tab } from 'nextra/components'
 
-## Hintergrund
+## 背景
+本提示测试 LLM 的代码生成能力，通过提供有关数据库模式信息来提示其生成有效的 MySQL 查询。
 
-Dieser Prompt testet die mathematischen Fähigkeiten eines LLM, indem er es auffordert, eine gegebene zusammengesetzte Funktion auszuwerten.
-
-## Prompt
-
-Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$$, was ist $$f(f(f(6)))$$?
+## 提示
+```markdown
+"""
+Table departments, columns = [DepartmentId, DepartmentName]
+Table students, columns = [DepartmentId, StudentId, StudentName]
+为计算机科学系的所有学生创建 MySQL 查询
+"""
+```
 
 ## Code / API
 
 <Tabs items={['GPT-4 (OpenAI)', 'Mixtral MoE 8x7B Instruct (Fireworks)']}>
     <Tab>
-  
         ```python
         from openai import OpenAI
         client = OpenAI()
@@ -24,11 +27,11 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
             messages=[
                 {
                 "role": "user",
-                "content": "Suppose  g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6 what is f(f(f(6)))?\n"
+                "content": "\"\"\"\nTable departments, columns = [DepartmentId, DepartmentName]\nTable students, columns = [DepartmentId, StudentId, StudentName]\n为计算机科学系的所有学生创建 MySQL 查询\n\"\"\""
                 }
             ],
             temperature=1,
-            max_tokens=256,
+            max_tokens=1000,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
@@ -45,7 +48,7 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
             messages=[
                 {
                 "role": "user",
-                "content": "Suppose  g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6 what is f(f(f(6)))?",
+                "content": "\"\"\"\nTable departments, columns = [DepartmentId, DepartmentName]\nTable students, columns = [DepartmentId, StudentId, StudentName]\n为计算机科学系的所有学生创建 MySQL 查询\n\"\"\"",
                 }
             ],
             stop=["<|im_start|>","<|im_end|>","<|endoftext|>"],
@@ -62,9 +65,8 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
         )
         ```
     </Tab>
-
 </Tabs>
 
-## Referenz
 
-- [Sparks of Artificial General Intelligence: Early experiments with GPT-4](https://arxiv.org/abs/2303.12712) (13. April 2023)
+## 参考
+- [Prompt Engineering Guide](https://www.promptingguide.ai/zh/introduction/examples#code-generation) (16 March 2023)

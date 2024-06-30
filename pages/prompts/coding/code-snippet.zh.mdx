@@ -1,20 +1,24 @@
-# Auswertung zusammengesetzter Funktionen
+# Generate Code Snippets with LLMs
 
-import { Tabs, Tab } from 'nextra/components';
+import { Tabs, Tab } from 'nextra/components'
 
-## Hintergrund
+## 背景
 
-Dieser Prompt testet die mathematischen Fähigkeiten eines LLM, indem er es auffordert, eine gegebene zusammengesetzte Funktion auszuwerten.
+此提示测试 LLM 的代码生成功能，通过使用 `/* <注释> */` 的注释提示它生成给定程序详细信息的相应代码片段。
 
-## Prompt
 
-Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$$, was ist $$f(f(f(6)))$$?
+## 提示词
+
+```markdown
+/*
+请提问用户输入他们的姓名，并说 "Hello"
+*/
+```
 
 ## Code / API
 
 <Tabs items={['GPT-4 (OpenAI)', 'Mixtral MoE 8x7B Instruct (Fireworks)']}>
     <Tab>
-  
         ```python
         from openai import OpenAI
         client = OpenAI()
@@ -24,11 +28,11 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
             messages=[
                 {
                 "role": "user",
-                "content": "Suppose  g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6 what is f(f(f(6)))?\n"
+                "content": "/*\n请提问用户输入他们的姓名，并说 \"Hello\"\n*/"
                 }
             ],
             temperature=1,
-            max_tokens=256,
+            max_tokens=1000,
             top_p=1,
             frequency_penalty=0,
             presence_penalty=0
@@ -45,7 +49,7 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
             messages=[
                 {
                 "role": "user",
-                "content": "Suppose  g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6 what is f(f(f(6)))?",
+                "content": "/*\n请提问用户输入他们的姓名，并说 \"Hello\"\n*/"
                 }
             ],
             stop=["<|im_start|>","<|im_end|>","<|endoftext|>"],
@@ -62,9 +66,8 @@ Angenommen $$g(x) = f^{-1}(x), g(0) = 5, g(4) = 7, g(3) = 2, g(7) = 9, g(9) = 6$
         )
         ```
     </Tab>
-
 </Tabs>
 
-## Referenz
 
-- [Sparks of Artificial General Intelligence: Early experiments with GPT-4](https://arxiv.org/abs/2303.12712) (13. April 2023)
+## 参考
+- [Prompt Engineering Guide](https://www.promptingguide.ai/zh/introduction/examples#code-generation) (16 March 2023)
